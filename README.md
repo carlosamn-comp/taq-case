@@ -36,6 +36,17 @@ Only after the TODOs are done. Pick any of these, in any order: one bonus done w
 - [ ] **End-to-end test** — write a browser test (for example with Playwright) covering the main flow: create a quest, move it to the last column and see the XP bar go up.
 - [ ] **Continuous integration** — add a GitHub Actions workflow that runs lint, typecheck and tests on every push to your repository.
 
+## Prerequisites
+
+Install these before you start:
+
+- [Git](https://git-scm.com/downloads)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (or Docker Engine with the Compose plugin), **running** while you work: the databases run in containers
+- [Bun](https://bun.com/docs/installation) **1.4.0**, the version pinned in `.bun-version`: it is the runtime, package manager and test runner of this project
+- [OpenCode](#using-opencode)
+
+The project uses the ports **5442** and **5443** (databases), **3000** (API) and **4000** (web app). Make sure nothing else is using them.
+
 ## Setting up your copy
 
 Your copy must keep this repository's commits, with your work added on top of them. So clone it with `git` — don't download it as a ZIP, which drops the history — and don't use GitHub's Fork button: a fork of a public repository can't be private.
@@ -94,8 +105,25 @@ The tracking plugin is already registered at `.opencode/plugin/tracking.ts` and 
 
 ## How to run the project
 
-- **Backend** — Elysia REST API + PostgreSQL, at the root of this repo (`apps/`, `packages/`). Setup (Docker, migrations, env vars), running, testing and architecture: [`BACKEND.md`](BACKEND.md).
-- **Frontend** — React/Vite web app, at `apps/web`. Setup (env vars), running and architecture: [`FRONTEND.md`](FRONTEND.md).
+From the repository root:
+
+```bash
+docker compose up -d --wait                              # start the dev and test databases
+bun install                                              # install the dependencies of every app
+cp .env.sample .env                                      # database URL
+cp apps/rest-server/.env.sample apps/rest-server/.env    # API settings
+cp apps/web/.env.sample apps/web/.env                    # API URL for the web app
+bun run migrate                                          # create the tables in the dev database
+bun run migrate:test                                     # create the tables in the test database
+bun run dev                                              # start the API and the web app
+```
+
+Then open the board at [http://localhost:4000](http://localhost:4000). The API answers at [http://localhost:3000/api/v1/quests](http://localhost:3000/api/v1/quests), and its docs are at [http://localhost:3000/api/v1/docs](http://localhost:3000/api/v1/docs).
+
+To run the tests, use `bun run test`. More details on each side:
+
+- **Backend** — Elysia REST API + PostgreSQL (`apps/rest-server`, `packages/`): environment variables, testing and architecture in [`BACKEND.md`](BACKEND.md).
+- **Frontend** — React/Vite web app (`apps/web`): running it alone, testing, Storybook and architecture in [`FRONTEND.md`](FRONTEND.md).
 
 ## What will be evaluated
 
