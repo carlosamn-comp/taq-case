@@ -15,7 +15,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=ticket_board_dev
+      - POSTGRES_DB=quest_board_dev
 
   test:
     <<: *postgres
@@ -24,4 +24,4 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=ticket_board_test
+      - POSTGRES_DB=quest_board_test

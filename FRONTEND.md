@@ -10,34 +10,30 @@ REST API.
 - [Vite](https://vite.dev/) — dev server and bundler
 - [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/) + `tailwind-variants` — styling
-- `src/atomic/` — Taqtile's Atomic Design system (Button, Card, Badge, Form fields, Modal, Pagination...)
+- `src/atomic/` — Taqtile's Atomic Design system (Button, text inputs, Typography, Modal, Grid, Loading...)
 - [Vitest](https://vitest.dev/) + Testing Library — unit/component tests
 - [Storybook](https://storybook.js.org/) — isolated component development
 
 ## Setup
 
-```bash
-cd apps/web
-```
-
-Point the app at the backend by setting `VITE_API_URL` — copy `.env.sample` to `.env`:
+Follow the setup in the root [`README.md`](README.md#how-to-run-the-project): it installs the dependencies
+of every app (`bun install` at the repo root) and creates `apps/web/.env` from its sample. That file points
+the app at the API:
 
 ```bash
 # apps/web/.env
 VITE_API_URL=http://localhost:3000
 ```
 
-Make sure the backend is running first — see [`BACKEND.md`](BACKEND.md). Dependencies are installed from
-the repo root (`bun install`), as part of the Nx/bun workspace.
-
 ## Running
 
 ```bash
-bun run dev                      # from the repo root — runs every app's dev target
-bunx nx dev @repo/web            # just this app
-# or, from apps/web/:
-bun run dev                      # Vite dev server at http://localhost:4000
+bun run dev                      # from the repo root: starts the API (3000) and the web app (4000) together
+bunx nx dev @repo/web            # from the repo root: just the web app, at http://localhost:4000
 ```
+
+Running the web app alone only makes sense when the API is already running: without it, the board shows a
+connection error.
 
 ## Testing
 
@@ -63,8 +59,8 @@ code, vendored as-is, not something this project's lint rules should reformat.
 Layers under `apps/web/src/`, following Taqtile's internal React Web template conventions — sibling
 folders, each with its own path alias:
 
-- **`atomic/`** — the design system: pure, business-rule-free UI components (`atm.*`/`mol.*`/`obj.*`/
-  `org.*` prefixes), each with its own `.component.tsx` + `.component.style.tsx` + `.stories.tsx`.
+- **`atomic/`** — the design system: pure, business-rule-free UI components (`atm.*`/`mol.*`/`obj.*`
+  prefixes), each with its own `.component.tsx` + `.component.style.tsx` + `.stories.tsx`.
 - **`core/http/`** — the REST client (`http-client.ts`, a thin `fetch` wrapper).
 - **`domain/model/`** — shared domain types (`quest.model.ts`).
 - **`domain/quests/`** — use-case hooks (`use-list-quests.use-case.ts`, `use-create-quest.use-case.ts`)
